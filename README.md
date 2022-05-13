@@ -9,6 +9,34 @@ dokku apps:create nextcloud
 dokku postgres:link nextcloud nextcloud
 ```
 
+You can also use Redis to make things faster:
+
+```sh
+dokku plugin:install https://github.com/dokku/dokku-redis.git redis
+dokku redis:create nextcloud
+dokku redis:link nextcloud nextcloud
+```
+
+See Redis info to get REDIS_HOST, REDIS_HOST_PASSWORD and REDIS_PORT:
+```sh
+dokku redis:info nextcloud
+```
+
+You will see redis-url in the output, it will look like this:
+
+```sh
+redis://:e0a4ac9383a961d4745a215b0d2b88ff92ac1285baff245bcd1ab68ae6072d5d@dokku-redis-nextcloud:6379
+```
+
+Now you can set Redis environment variables to the nextcloud app:
+
+```sh
+dokku config:set nextcloud \
+REDIS_HOST=dokku-redis-nextcloud \
+REDIS_HOST_PASSWORD=e0a4ac9383a961d4745a215b0d2b88ff92ac1285baff245bcd1ab68ae6072d5d \
+REDIS_PORT=6379
+```
+
 Then, from your machine, after cloning this repo and adding `dokku` as a remote:
 
 ```sh
